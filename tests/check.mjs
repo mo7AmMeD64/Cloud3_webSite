@@ -142,6 +142,11 @@ async function newPage({ width = 1440, height = 900, lang = 'ar', js = true, mot
     deviceScaleFactor: 1
   });
   await mockApi(context, mode);
+  // CI runners report few cores, which would switch the site into lite mode.
+  await context.addInitScript(() => {
+    Object.defineProperty(navigator, 'hardwareConcurrency', { get: () => 8 });
+    Object.defineProperty(navigator, 'deviceMemory', { get: () => 8 });
+  });
   const page = await context.newPage();
   if (mode === 'success') attach(page);
   return { context, page };
@@ -215,10 +220,11 @@ for (const [lang, prefix] of langs) {
   if ((await page.viewportSize()).width > 900) {
     await page.goto(BASE + prefix, { waitUntil: 'load' });
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForFunction(() => {
+    const pinned = await page.waitForFunction(() => {
       const el = document.querySelector('[data-screens]');
       return !!el && el.classList.contains('is-pinned') && !!window.ScrollTrigger;
-    }, null, { timeout: 10000 });
+    }, null, { timeout: 10000 }).then(() => true).catch(() => false);
+    check(`${lang}: the reel pins on desktop`, pinned);
     await page.evaluate(() => {
       const el = document.getElementById('screens');
       const hit = window.ScrollTrigger.getAll().find((t) => t.pin === el || t.trigger === el);
