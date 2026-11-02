@@ -1,0 +1,21 @@
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">cloud3</p>
+    <h1>{{t.legal.title}}</h1>
+    <p>{{t.footer.disclaimer}}</p>
+  </div>
+</section>
+<section class="prose">
+  <div class="wrap">
+    <p class="prose__meta"><span>{{t.legal.updated}}</span><b>{{t.legal.updatedAt}}</b><span>·</span><span>GPL-3.0</span></p>
+    <div class="prose__grid">
+      {{#each t.legal.sections}}
+      <div>
+        <h2>{{h}}</h2>
+        <p>{{p}}</p>
+      </div>
+      {{/each}}
+    </div>
+    <a class="btn btn--ghost prose__back" href="{{homeHref}}">{{t.legal.back}}</a>
+  </div>
+</section>

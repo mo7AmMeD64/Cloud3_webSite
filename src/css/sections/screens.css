@@ -1,0 +1,97 @@
+/* Screens: a pinned horizontal reel on desktop, a swipe reel everywhere else. */
+.screens {
+  background: var(--bg);
+  border-block-start: 1px solid var(--border);
+  overflow: hidden;
+}
+.screens__head {
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+  gap: 20px;
+}
+.screens__meta { display: flex; align-items: center; gap: 8px; margin-inline-start: auto; }
+.screens__count {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.16em;
+  color: var(--muted); font-variant-numeric: tabular-nums;
+  margin-inline-end: 8px;
+}
+.screens__count b { color: var(--text); font-size: 1.05rem; }
+
+.round-btn {
+  display: grid; place-items: center;
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  transition: background-color 0.25s, border-color 0.25s, transform 0.4s var(--ease-out);
+}
+.round-btn:hover { background: rgb(255 255 255 / 0.07); border-color: var(--text); }
+.round-btn:active { transform: scale(0.94); }
+.round-btn svg { width: 20px; height: 20px; }
+
+.screens__viewport {
+  margin-block-start: clamp(28px, 4vw, 48px);
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  padding-block-end: 12px;
+}
+.screens__viewport::-webkit-scrollbar { display: none; }
+.screens__track {
+  display: flex; gap: clamp(16px, 3vw, 34px);
+  width: max-content;
+  padding-inline: var(--gut);
+  will-change: transform;
+}
+.screen-card {
+  flex: 0 0 auto;
+  width: clamp(240px, min(38vw, 42vh), 420px);
+  scroll-snap-align: center;
+}
+.screen-card__frame {
+  position: relative;
+  border-radius: 30px;
+  padding: 8px;
+  background: linear-gradient(160deg, #2a2a30, #101013 55%);
+  box-shadow: 0 40px 80px -44px rgb(0 0 0 / 0.95), inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  overflow: hidden;
+}
+.screen-card__frame::after {
+  content: ''; position: absolute; inset-block-start: 8px; inset-inline-start: 50%;
+  translate: -50% 0;
+  width: 30%; height: 14px; border-radius: 0 0 10px 10px;
+  background: #0b0b0d;
+  z-index: 2;
+}
+.screen-card img {
+  width: 100%; height: auto; display: block;
+  border-radius: 22px;
+  background: #111;
+}
+.screen-card__meta {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-block-start: 18px;
+}
+.screen-card__n {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+  color: var(--accent); font-variant-numeric: tabular-nums;
+}
+.screen-card__title { font-size: var(--step-1); }
+.screen-card__line {
+  margin-block-start: 6px; padding-inline-start: 30px;
+  color: var(--muted); font-size: var(--step--1); line-height: 1.6;
+}
+html[dir='rtl'] .screen-card__n { letter-spacing: 0; }
+
+/* Pinned mode is switched on by JS, never by CSS alone. */
+.screens.is-pinned { height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-block: 0; }
+.screens.is-pinned .screens__head { padding-inline: var(--gut); max-width: var(--max); margin-inline: auto; width: 100%; }
+.screens.is-pinned .screens__viewport { overflow: visible; padding-block-end: 0; }
+.screens.is-pinned .screen-card { scroll-snap-align: none; }
+
+@media (max-width: 900px) {
+  .screens__head { align-items: flex-start; }
+  .screens__meta { margin-inline-start: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .round-btn { transition: none; }
+}

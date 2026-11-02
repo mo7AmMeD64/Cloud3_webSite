@@ -1,0 +1,32 @@
+/* Word marquee between hero and features. */
+.marquee {
+  position: relative; overflow: hidden;
+  border-block: 1px solid var(--border);
+  padding-block: 18px;
+  background: var(--bg-deep);
+}
+.marquee__track {
+  display: flex; align-items: center; gap: 0;
+  width: max-content;
+  animation: marquee 34s linear infinite;
+}
+.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee__group { display: flex; align-items: center; flex-shrink: 0; }
+.marquee__item {
+  display: inline-flex; align-items: center; gap: 22px;
+  padding-inline: 22px;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  font-weight: 700; color: var(--muted); white-space: nowrap;
+}
+.marquee__item::after {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+}
+html[dir='rtl'] .marquee__track { animation-direction: reverse; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; flex-wrap: wrap; width: auto; }
+  .marquee__group[aria-hidden='true'] { display: none; }
+  .marquee__item { padding-inline: 12px; }
+}

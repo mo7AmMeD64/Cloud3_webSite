@@ -1,0 +1,49 @@
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="brand" href="{{homeHref}}">
+          <img src="{{root}}icon-64.png" alt="" width="30" height="30">
+          <span>cloud3</span>
+        </a>
+        <p class="footer__tagline">{{t.footer.tagline}}</p>
+        <a class="lang-switch" href="{{altUrl}}" hreflang="{{altLang}}" lang="{{altLang}}" data-lang-switch aria-label="{{t.a11y.langLabel}}">{{t.a11y.lang}}</a>
+      </div>
+      <div class="footer__col">
+        <h3>{{t.footer.site}}</h3>
+        <ul>
+          <li><a href="{{navPrefix}}features">{{t.nav.features}}</a></li>
+          <li><a href="{{navPrefix}}screens">{{t.nav.screens}}</a></li>
+          <li><a href="{{navPrefix}}manga">{{t.nav.manga}}</a></li>
+          <li><a href="{{navPrefix}}download">{{t.nav.download}}</a></li>
+          <li><a href="{{navPrefix}}faq">{{t.nav.faq}}</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h3>{{t.footer.project}}</h3>
+        <ul>
+          <li><a href="{{github}}" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="{{telegram}}" target="_blank" rel="noopener noreferrer">Telegram</a></li>
+          <li><a href="{{github}}/releases" target="_blank" rel="noopener noreferrer">{{t.download.allReleases}}</a></li>
+          <li><a href="{{root}}vinyl/index.html">{{t.footer.vinyl}}</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h3>{{t.footer.legal}}</h3>
+        <ul>
+          <li><a href="{{legalHref}}">{{t.footer.legalLink}}</a></li>
+          <li><a href="{{github}}/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GPL-3.0</a></li>
+          <li><a href="{{github}}/blob/main/NOTICE" target="_blank" rel="noopener noreferrer">NOTICE</a></li>
+          <li><a href="{{donate}}" target="_blank" rel="noopener noreferrer">{{t.community.donateCta}}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© {{year}} cloud3. {{t.footer.license}} {{t.footer.credits}} {{t.footer.disclaimer}}</p>
+      <div class="footer__meta">
+        <span>{{t.footer.made}}</span>
+        <a class="footer__lang" href="{{altUrl}}" hreflang="{{altLang}}" lang="{{altLang}}" data-lang-switch>{{t.a11y.lang}}</a>
+      </div>
+    </div>
+  </div>
+</footer>

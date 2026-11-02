@@ -1,0 +1,24 @@
+{
+  "app": "cloud3",
+  "appInternal": "KodaStream",
+  "version": "0.10.2",
+  "license": "GPL-3.0",
+  "minAndroid": 8,
+  "repo": "mo7AmMeD64/cloudSTREAM3",
+  "siteUrl": "https://mo7AmMeD64.github.io/Cloud3_webSite/",
+  "basePath": "/Cloud3_webSite/",
+  "github": "https://github.com/mo7AmMeD64/cloudSTREAM3",
+  "telegram": "https://t.me/fullappk",
+  "donate": "https://creators.sa/x3onq",
+  "releasesApi": "https://api.github.com/repos/mo7AmMeD64/cloudSTREAM3/releases/latest",
+  "manga": {
+    "status": "soon",
+    "reason": "browse and library exist in main; no reader screen yet"
+  },
+  "screens": [
+    "home",
+    "library",
+    "details",
+    "settings"
+  ]
+}

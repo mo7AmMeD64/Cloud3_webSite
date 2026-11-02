@@ -1,0 +1,349 @@
+{
+  "lang": "en",
+  "dir": "ltr",
+  "meta": {
+    "title": "cloud3 — Watch. Read. All in one app.",
+    "desc": "cloud3 is an open-source Android app for movies, series and manga. Add the extensions you like, then browse, search and keep your favourites in a Material 3 design.",
+    "ogAlt": "cloud3 — an Android app for movies, series and manga"
+  },
+  "a11y": {
+    "skip": "Skip to content",
+    "menu": "Menu",
+    "close": "Close menu",
+    "lang": "العربية",
+    "langLabel": "Switch to Arabic",
+    "current": "Current scene",
+    "newTab": "opens in a new tab",
+    "playScenes": "Play the scenes"
+  },
+  "nav": {
+    "features": "Features",
+    "screens": "Screens",
+    "manga": "Manga",
+    "download": "Download",
+    "faq": "FAQ",
+    "github": "GitHub",
+    "telegram": "Telegram"
+  },
+  "loader": { "label": "Loading cloud3" },
+  "hero": {
+    "eyebrow": "Open source · Android",
+    "title": "Watch. Read. All in one app.",
+    "text": "cloud3 is an Android app for movies, series and manga. Add the extensions you like, then browse, search and save your favorites in a beautiful Material 3 design.",
+    "primary": "Download APK",
+    "secondary": "See more",
+    "pause": "Pause the scenes",
+    "play": "Play the scenes",
+    "scenes": [
+      {
+        "id": "watch",
+        "label": "Watch",
+        "line": "A cinematic home that puts tonight's pick first."
+      },
+      {
+        "id": "library",
+        "label": "Library",
+        "line": "Favorites, watchlist and categories, exactly where you left them."
+      },
+      {
+        "id": "manga",
+        "label": "Manga",
+        "line": "Mihon-compatible sources, in a library of their own."
+      }
+    ],
+    "hint": "Swipe or use the arrow keys"
+  },
+  "marquee": [
+    "Movies",
+    "Series",
+    "Manga",
+    "Extensions",
+    "Arabic",
+    "Material 3",
+    "Open source",
+    "No ads"
+  ],
+  "features": {
+    "eyebrow": "What is inside",
+    "title": "Built for your library, not a store",
+    "lead": "cloud3 ships with no content at all. You choose the sources, and the app stays out of the way.",
+    "items": [
+      {
+        "icon": "plug",
+        "title": "Extensions, your sources",
+        "line": "Add any CloudStream extension and its providers appear in the app."
+      },
+      {
+        "icon": "sparkles",
+        "title": "Two home heroes",
+        "line": "Pick the cinematic hero or the classic layout, right from Settings."
+      },
+      {
+        "icon": "palette",
+        "title": "Themes and colours",
+        "line": "Light, dark, pure-black AMOLED, or colours taken from your wallpaper."
+      },
+      {
+        "icon": "layout",
+        "title": "Side or bottom navigation",
+        "line": "Move the navigation bar to the side for tablets and big screens."
+      },
+      {
+        "icon": "folder",
+        "title": "Library with categories",
+        "line": "Favourites and watchlist, plus categories you create, rename and fill."
+      },
+      {
+        "icon": "history",
+        "title": "History that resumes",
+        "line": "Pick up an episode where you stopped, with the poster size you prefer."
+      },
+      {
+        "icon": "search",
+        "title": "Search with memory",
+        "line": "Search across your sources, with the history of what you looked for."
+      },
+      {
+        "icon": "play",
+        "title": "A quiet player",
+        "line": "Immersive playback, hold anywhere for 2x speed, screen kept awake."
+      },
+      {
+        "icon": "download",
+        "title": "Downloads your way",
+        "line": "Save with an external download manager such as 1DM, or copy the link."
+      },
+      {
+        "icon": "refresh",
+        "title": "Updates that wait",
+        "line": "Extensions refresh at startup; releases are offered, never forced."
+      },
+      {
+        "icon": "globe",
+        "title": "Arabic and English",
+        "line": "Full right-to-left interface in Arabic, and a proper English one."
+      },
+      {
+        "icon": "book",
+        "title": "A separate manga world",
+        "line": "Manga has its own browse, library and history, away from your films."
+      }
+    ]
+  },
+  "screens": {
+    "eyebrow": "Take a look",
+    "title": "Screens, as they ship",
+    "lead": "Four screens from the current build. Swipe, scroll or use the arrows.",
+    "prev": "Previous screen",
+    "next": "Next screen",
+    "items": [
+      {
+        "src": "home",
+        "alt": "The cloud3 home screen, with a large cinematic pick above rows of posters",
+        "title": "Home",
+        "line": "The cinematic hero, then rows of the day's picks and latest episodes."
+      },
+      {
+        "src": "library",
+        "alt": "The cloud3 library screen with favorites and watchlist",
+        "title": "Library",
+        "line": "Favorites, watchlist and your own categories, one tap apart."
+      },
+      {
+        "src": "details",
+        "alt": "A cloud3 details screen with synopsis and episode list",
+        "title": "Details",
+        "line": "Synopsis, cast, episodes and the sources that carry the title."
+      },
+      {
+        "src": "settings",
+        "alt": "The cloud3 settings screen with appearance options",
+        "title": "Settings",
+        "line": "Theme, home hero, navigation position, playback and storage."
+      }
+    ]
+  },
+  "manga": {
+    "eyebrow": "New shelf",
+    "title": "Manga",
+    "ghost": "MANGA",
+    "lead": "The same app, a second library. cloud3 reads through Mihon-compatible extensions, so the sources you already trust keep working.",
+    "badgeSoon": "Soon",
+    "badgeBeta": "Beta",
+    "badgeLive": "Available",
+    "statusSoon": "Browsing, sources and a separate library are in place. The reader is still being finished — it will arrive in an upcoming build.",
+    "statusBeta": "Browsing, the reader and a separate library all work. Expect rough edges while it settles.",
+    "statusLive": "Browsing, the reader and a separate library are all available.",
+    "bullets": [
+      "Mihon-compatible extensions, including the Keiyoushi store.",
+      "Many Arabic sources, listed and filtered by language.",
+      "A reader with right-to-left, left-to-right and endless webtoon modes.",
+      "A library with categories, plus a history separate from your films."
+    ],
+    "demoTitle": "Reading direction",
+    "demoNote": "Right-to-left is the default for manga. Pages flip like this:",
+    "demoPages": ["1", "2", "3"],
+    "phoneAlt": "A placeholder drawing of the cloud3 manga reader: a page, a page counter and a chapter bar"
+  },
+  "how": {
+    "eyebrow": "Three steps",
+    "title": "How it works",
+    "lead": "No account, no sign-up, nothing to configure before the app is useful.",
+    "steps": [
+      {
+        "n": "01",
+        "title": "Install the app",
+        "line": "Download the APK from the latest official release and open it."
+      },
+      {
+        "n": "02",
+        "title": "Add extensions",
+        "line": "Open Extensions, add the repository you want, and install the sources."
+      },
+      {
+        "n": "03",
+        "title": "Watch or read",
+        "line": "Search, browse, save to your library, and the app remembers the rest."
+      }
+    ]
+  },
+  "download": {
+    "eyebrow": "Get it",
+    "title": "Download cloud3",
+    "lead": "One file, signed and built by GitHub Actions from the public source.",
+    "version": "Latest version",
+    "released": "Published",
+    "size": "APK size",
+    "notes": "What changed",
+    "loading": "Checking the latest release…",
+    "apk": "Download APK",
+    "apkVersioned": "Download APK {version}",
+    "allReleases": "All releases",
+    "offline": "The release feed is unreachable right now. Use the button — it always opens the official page.",
+    "seeChanges": "See what changed on GitHub",
+    "requirements": "Requirements",
+    "reqList": ["Android 8.0 or newer", "About 30 MB of free space", "An internet connection for streaming"],
+    "install": "Installing",
+    "installSteps": [
+      "Download the APK from this page.",
+      "Allow installing from this source when Android asks.",
+      "Open the file and confirm. Then add extensions inside the app."
+    ],
+    "warn": "Play Protect may warn you about apps installed outside the Play Store — that is normal for a self-published build. The full source code is public, so you can check what the APK does.",
+    "source": "Read the source"
+  },
+  "faq": {
+    "eyebrow": "Questions",
+    "title": "Frequently asked",
+    "items": [
+      {
+        "q": "Is cloud3 free?",
+        "a": "Yes. It is free, has no ads, and asks for no account. You can support it with a donation, but nothing is locked behind one."
+      },
+      {
+        "q": "Does it include movies, series or manga?",
+        "a": "No. cloud3 ships with no content and no providers. Everything you watch or read comes from extensions you install yourself."
+      },
+      {
+        "q": "How do I add extensions?",
+        "a": "Open the Extensions screen, add a repository address, then install the sources you want. They appear in search and browse immediately."
+      },
+      {
+        "q": "Which Android versions are supported?",
+        "a": "Android 8.0 (API 26) and newer. The app is built for phones and adapts to tablets."
+      },
+      {
+        "q": "Is it open source?",
+        "a": "Yes, under the GNU GPL v3. The code lives on GitHub and every official build is compiled by GitHub Actions from that source."
+      },
+      {
+        "q": "How do I update?",
+        "a": "Install the newer APK over the old one; your library, history and settings stay. The app also tells you when an official release is available, and only for official ones."
+      },
+      {
+        "q": "Why does Android warn me when installing?",
+        "a": "Because the app is not distributed through Google Play. Android asks you to allow installs from your browser or file manager. That is expected for a self-published APK."
+      },
+      {
+        "q": "Does it work in Arabic?",
+        "a": "Fully. The interface is translated and laid out right-to-left, and Arabic titles render correctly inside the rest of the app."
+      },
+      {
+        "q": "How do I read manga?",
+        "a": "Install a Mihon-compatible extension from a store such as Keiyoushi, then open the Manga tab. Manga has its own library and history. The reader is still being finished."
+      },
+      {
+        "q": "How do I report a bug or ask for a feature?",
+        "a": "Open an issue on GitHub, or write in the Telegram channel. Screenshots and the version number help a lot."
+      }
+    ]
+  },
+  "community": {
+    "eyebrow": "Stay close",
+    "title": "Around the project",
+    "lead": "Updates land on Telegram first. Code, bugs and ideas live on GitHub.",
+    "telegramTitle": "Telegram channel",
+    "telegramLine": "Release notes, screenshots and the quickest answers.",
+    "telegramCta": "Open Telegram",
+    "githubTitle": "GitHub",
+    "githubLine": "Read the code, report a bug, send a pull request.",
+    "githubCta": "Open GitHub",
+    "donateTitle": "Support it",
+    "donateLine": "If cloud3 earns a place on your phone, a small donation keeps it going. Never required.",
+    "donateCta": "Donate"
+  },
+  "footer": {
+    "tagline": "An open-source Android app for movies, series and manga.",
+    "site": "Site",
+    "project": "Project",
+    "legal": "Legal",
+    "legalLink": "Legal and disclaimer",
+    "vinyl": "Vinyl player demo",
+    "license": "cloud3 is free software under the GPL-3.0.",
+    "credits": "Built on the work of CloudStream, Nuvio and Mihon.",
+    "disclaimer": "cloud3 hosts no content and is not affiliated with any content provider.",
+    "made": "Made in Baghdad"
+  },
+  "legal": {
+    "title": "Legal and disclaimer",
+    "updated": "Last updated",
+    "updatedAt": "November 2026",
+    "sections": [
+      {
+        "h": "No content is hosted here",
+        "p": "cloud3 is a player and a library. The app contains no films, series, manga, channels or providers, and this website hosts none either. Everything you watch or read comes from third-party extensions that you choose and install yourself."
+      },
+      {
+        "h": "Extensions are third-party software",
+        "p": "Extensions and the sources they point to are written and maintained by other people. cloud3 does not control them, does not check what they return, and cannot vouch for their legality in your country. You are responsible for what you add and for obeying the laws that apply to you."
+      },
+      {
+        "h": "No affiliation",
+        "p": "The project is not affiliated with CloudStream, Mihon, Keiyoushi, Nuvio, Google, or any content provider, studio or streaming service. Names are mentioned only to describe where code or extension formats come from."
+      },
+      {
+        "h": "Licence",
+        "p": "cloud3 is free software under the GNU General Public License v3.0. You may use, study, change and share it under the same licence. The full text is in the repository's LICENSE file."
+      },
+      {
+        "h": "The author's terms",
+        "p": "Keep it open source. Keep the credit. Mark your modifications clearly. Please do not sell the app or a build of it."
+      },
+      {
+        "h": "Credits",
+        "p": "cloud3 builds on open-source work: CloudStream for the extension system, Nuvio for the cinematic hero (GPL-3.0), and Mihon for the manga compatibility layer (Apache-2.0). The NOTICE file lists every copied file."
+      },
+      {
+        "h": "Contact",
+        "p": "Questions about any of this belong in the Telegram channel."
+      }
+    ],
+    "back": "Back to home"
+  },
+  "notfound": {
+    "code": "404",
+    "title": "This page went missing",
+    "text": "The link may be old, or the page moved. The app is still where you left it.",
+    "cta": "Back to home"
+  }
+}

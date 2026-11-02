@@ -1,0 +1,45 @@
+/* Community: three warm cards. */
+.community { background: var(--bg); }
+.community__grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px; margin-block-start: clamp(30px, 4vw, 50px);
+}
+.card-link {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 10px;
+  padding: clamp(22px, 3vw, 32px);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface);
+  transition: transform 0.45s var(--ease-out), border-color 0.3s, background-color 0.3s;
+}
+.card-link:hover { transform: translateY(-4px); border-color: var(--border-strong); background: var(--surface-2); }
+.card-link__icon {
+  display: grid; place-items: center;
+  width: 42px; height: 42px; border-radius: 12px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  margin-block-end: 6px;
+}
+.card-link__icon svg { width: 20px; height: 20px; }
+.card-link__title { font-size: var(--step-1); }
+.card-link__line { color: var(--muted); font-size: var(--step--1); line-height: 1.62; }
+.card-link__cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-block-start: 12px; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: #ff8b93;
+}
+html[lang='ar'] .card-link__cta { letter-spacing: 0; text-transform: none; font-size: 13px; }
+.card-link__cta svg { width: 14px; height: 14px; transition: transform 0.35s var(--ease-out); }
+html[dir='rtl'] .card-link__cta svg { transform: scaleX(-1); }
+.card-link:hover .card-link__cta svg { transform: translateX(4px); }
+html[dir='rtl'] .card-link:hover .card-link__cta svg { transform: scaleX(-1) translateX(4px); }
+.card-link--donate { background: linear-gradient(160deg, rgb(229 51 63 / 0.16), var(--surface) 70%); }
+.card-link--donate .card-link__icon { color: #ff8b93; border-color: rgb(229 51 63 / 0.3); }
+
+@media (max-width: 900px) {
+  .community__grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-link { transition: none; }
+  .card-link:hover { transform: none; }
+}

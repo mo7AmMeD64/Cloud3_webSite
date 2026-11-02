@@ -1,0 +1,55 @@
+/* Footer */
+.footer {
+  position: relative; overflow: hidden;
+  background: var(--bg-deep);
+  border-block-start: 1px solid var(--border);
+  padding-block: clamp(48px, 7vw, 84px) 30px;
+}
+.footer::before {
+  content: ''; position: absolute; inset-block-end: -60%; inset-inline-start: 50%;
+  translate: -50% 0;
+  width: min(900px, 120vw); aspect-ratio: 1;
+  background: radial-gradient(circle, rgb(229 51 63 / 0.14), transparent 62%);
+  pointer-events: none;
+}
+.footer__grid {
+  position: relative;
+  display: grid; grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 0.8fr));
+  gap: clamp(26px, 4vw, 56px);
+}
+.footer__brand { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.footer__brand .brand { margin-inline-end: 0; }
+.footer__tagline { color: var(--muted); font-size: var(--step--1); max-width: 34ch; line-height: 1.65; }
+.footer__col h3 {
+  font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); font-weight: 700;
+}
+html[lang='ar'] .footer__col h3 { letter-spacing: 0; text-transform: none; font-size: 11.5px; }
+.footer__col ul { margin-block-start: 14px; display: grid; gap: 9px; }
+.footer__col a { font-size: 13.5px; color: var(--text); opacity: 0.82; transition: opacity 0.2s, color 0.2s; }
+.footer__col a:hover { opacity: 1; color: #ff9aa1; }
+.footer__bottom {
+  position: relative;
+  margin-block-start: clamp(36px, 5vw, 60px);
+  padding-block-start: 22px;
+  border-block-start: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: center; justify-content: space-between;
+  color: var(--muted); font-size: 12px; line-height: 1.6;
+}
+.footer__bottom p { max-width: 78ch; }
+.footer__meta { display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: center; }
+.footer__lang {
+  display: inline-flex; align-items: center; gap: 7px;
+  color: var(--text); font-weight: 700; font-size: 12.5px;
+  border-block-end: 1px solid var(--border-strong); padding-block-end: 2px;
+}
+.footer__lang:hover { color: #ff9aa1; border-color: #ff9aa1; }
+
+@media (max-width: 900px) {
+  .footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .footer__brand { grid-column: span 2; }
+}
+@media (max-width: 480px) {
+  .footer__grid { grid-template-columns: 1fr; }
+  .footer__brand { grid-column: auto; }
+}

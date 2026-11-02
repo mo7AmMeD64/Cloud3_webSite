@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="{{htmlLang}}" dir="{{dir}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}}</title>
+<meta name="description" content="{{desc}}">
+<meta name="theme-color" content="#0d0d0f">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; style-src 'self'; script-src 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="canonical" href="{{canonical}}">
+<link rel="alternate" hreflang="ar" href="{{altAr}}">
+<link rel="alternate" hreflang="en" href="{{altEn}}">
+<link rel="alternate" hreflang="x-default" href="{{altAr}}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="cloud3">
+<meta property="og:title" content="{{title}}">
+<meta property="og:description" content="{{desc}}">
+<meta property="og:url" content="{{canonical}}">
+<meta property="og:image" content="{{siteUrl}}og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{t.meta.ogAlt}}">
+<meta property="og:locale" content="{{ogLocale}}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{title}}">
+<meta name="twitter:description" content="{{desc}}">
+<meta name="twitter:image" content="{{siteUrl}}og.jpg">
+<link rel="icon" href="{{root}}favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="{{root}}apple-touch-icon.png">
+<link rel="manifest" href="{{root}}manifest.webmanifest">
+<link rel="preload" href="{{root}}fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{root}}fonts/readex-arabic.woff2" as="font" type="font/woff2" crossorigin>
+{{{preloadImage}}}
+<link rel="stylesheet" href="{{root}}assets/{{css}}">
+<script src="{{root}}assets/{{headJs}}"></script>
+</head>
+<body class="{{bodyClass}}">
+<a class="skip" href="#main">{{t.a11y.skip}}</a>
+<div class="progress" data-progress aria-hidden="true"></div>
+{{> nav}}
+<main id="main">
+{{{content}}}
+</main>
+{{> footer}}
+{{> loader}}
+<script src="{{root}}assets/{{vendorJs}}" defer></script>
+<script src="{{root}}assets/{{appJs}}" defer></script>
+</body>
+</html>
