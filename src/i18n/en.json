@@ -3,8 +3,8 @@
   "dir": "ltr",
   "meta": {
     "title": "cloud3 — Watch. Read. Listen.",
-    "desc": "cloud3 is an open-source Android player for movies, series and manga. Download the latest build, see the app, and play the record.",
-    "ogAlt": "cloud3 — the Android app for movies, series and manga"
+    "desc": "cloud3 is an open-source Android player for films, series and manga. Download the latest build, look inside the app, and put a record on.",
+    "ogAlt": "cloud3 — the Android app for films, series and manga"
   },
   "a11y": {
     "skip": "Skip to content",
@@ -30,7 +30,7 @@
     "eyebrow": "Android · Open source · No ads",
     "title": "Watch. Read.",
     "accent": "Listen.",
-    "lead": "One player for your films, your series and your manga. You pick the sources; the app stays out of your way.",
+    "lead": "One player for your films, series and manga. You choose the sources; cloud3 keeps everything else quiet.",
     "primary": "Download APK",
     "secondary": "Hear the music",
     "ghost": "cloud3",
@@ -53,39 +53,39 @@
       }
     ],
     "scroll": "Scroll",
-    "alt": "Makima from Chainsaw Man, illustrated from behind with a red braid",
-    "credit": "Makima · Chainsaw Man — fan art"
+    "alt": "Yoru from Chainsaw Man, black hair and a scarred face, lifting the hem of a dark sweatshirt",
+    "credit": "Yoru · Chainsaw Man — fan art"
   },
   "features": {
-    "eyebrow": "What is inside",
+    "eyebrow": "Inside the app",
     "title": "Your library, not a content store",
-    "lead": "cloud3 ships empty. You choose the sources, and the app stays out of your way.",
+    "lead": "cloud3 ships empty by design. Add the sources you trust and they appear across search and browse.",
     "items": [
       {
         "icon": "play",
         "title": "Films and series",
-        "line": "Add any CloudStream-compatible extension and its sources appear in search and browse at once."
+        "line": "Install any CloudStream-compatible extension and its sources show up in search and browse."
       },
       {
         "icon": "book",
         "title": "Manga, kept separate",
-        "line": "Mihon-compatible extensions, with their own categories and reading history.",
+        "line": "Mihon-compatible extensions get their own shelves, categories and reading history.",
         "tag": "Soon"
       },
       {
         "icon": "globe",
-        "title": "Fully Arabic",
-        "line": "A right-to-left interface with correct Arabic titles and consistent Latin digits."
+        "title": "Arabic throughout",
+        "line": "A true right-to-left interface, with Arabic titles set correctly and Latin digits kept consistent."
       },
       {
         "icon": "sparkles",
         "title": "Open and ad-free",
-        "line": "GPL-3.0, no account, no tracking, and every official build compiled from public code."
+        "line": "GPL-3.0, no account, no tracking. Every official build is compiled in public by GitHub Actions."
       }
     ]
   },
   "screens": {
-    "eyebrow": "A look",
+    "eyebrow": "The app",
     "title": "Three screens, no filler",
     "lead": "From the current build: home, library and a title page.",
     "items": [
@@ -93,7 +93,7 @@
         "src": "home",
         "alt": "cloud3 home screen with a large cinematic card above poster rows",
         "title": "Home",
-        "line": "One cinematic card, then tonight's picks and the latest episodes."
+        "line": "One cinematic card, then tonight's picks and the newest episodes."
       },
       {
         "src": "library",
@@ -105,14 +105,14 @@
         "src": "details",
         "alt": "cloud3 title page with the synopsis and the episode list",
         "title": "Details",
-        "line": "Synopsis, episodes, sub and dub, from whichever source you choose."
+        "line": "Synopsis, episodes, subtitles and dubbing, from whichever source you choose."
       }
     ]
   },
   "music": {
     "eyebrow": "A break",
     "title": "A record, not a picture",
-    "lead": "The player runs in the browser: three tracks, a spinning disc, real audio. Press play.",
+    "lead": "Three tracks from June Vale, played in full on this page. Real audio, a disc that turns while it plays, and nothing to install.",
     "album": "Glasshouse Weather",
     "artist": "June Vale",
     "listen": "Listen now",
@@ -120,13 +120,13 @@
     "pause": "Pause",
     "play": "Play the record",
     "tracks": "Tracks",
-    "note": "The Vinyl project from the first build, embedded here instead of hidden on its own page.",
+    "note": "Recorded for the first cloud3 build.",
     "full": "Full player"
   },
   "download": {
     "eyebrow": "Get it",
     "title": "Download cloud3",
-    "lead": "One file, signed and built by GitHub Actions from the public source.",
+    "lead": "One signed APK, built from the public source by GitHub Actions.",
     "version": "Latest release",
     "released": "Published",
     "size": "File size",
@@ -135,7 +135,7 @@
     "apk": "Download APK",
     "apkVersioned": "Download APK {version}",
     "allReleases": "All releases",
-    "offline": "The release list is unreachable right now. Use the button below; it always opens the official page.",
+    "offline": "The release list is unreachable right now. The button below still opens the official release page.",
     "seeChanges": "See the changes on GitHub",
     "requirements": "Requirements",
     "reqList": [
@@ -146,10 +146,10 @@
     "install": "Install",
     "installSteps": [
       "Download the APK from this page.",
-      "Allow installing from this source when Android asks.",
-      "Open the file, confirm, then add extensions inside the app."
+      "When Android asks, allow installs from this source.",
+      "Open the file, confirm, then add your extensions in the app."
     ],
-    "warn": "Play Protect may warn about an app installed outside Play. That is normal for a build published by its author. The source is public, so you can check what the file does."
+    "warn": "Play Protect may warn about apps installed outside Play. That is expected for a build published by its author; the source is public, so you can check exactly what the file does."
   },
   "faq": {
     "eyebrow": "Questions",
@@ -157,42 +157,42 @@
     "items": [
       {
         "q": "Is cloud3 free?",
-        "a": "Yes. Free, no ads, no account required. You can support it with a donation, but nothing is locked behind one."
+        "a": "Yes. It is free, with no ads and no account. Donations are welcome but never required, and nothing is locked behind them."
       },
       {
         "q": "Does it include films, series or manga?",
-        "a": "No. cloud3 ships with no content and no sources. Everything you watch or read comes from extensions you install yourself."
+        "a": "No. cloud3 arrives empty, with no content and no sources. What you watch or read comes from extensions you install yourself."
       },
       {
         "q": "How do I add extensions?",
-        "a": "Open the extensions screen, add the repository URL, then install the sources you want. They appear in search and browse immediately."
+        "a": "Open the extensions screen, add the repository URL, then install the sources you want. They appear in search and browse straight away."
       },
       {
         "q": "Which Android versions are supported?",
-        "a": "Android 8.0 (API 26) and newer. It is built for phones and adapts to tablets."
+        "a": "Android 8.0 (API 26) and newer. It is designed for phones and adapts to tablets."
       },
       {
         "q": "Is it open source?",
-        "a": "Yes, under GPL v3. The code is on GitHub, and every official build is produced by GitHub Actions from that code."
+        "a": "Yes, under GPL v3. The code is on GitHub, and every official build is produced there by GitHub Actions."
       },
       {
         "q": "How do I update?",
-        "a": "Install the new APK over the old one and your library, history and settings stay."
+        "a": "Install the new APK over the old one. Your library, history and settings stay in place."
       }
     ]
   },
   "community": {
     "eyebrow": "Stay close",
     "title": "About the project",
-    "lead": "Release notes land on Telegram first; code, issues and ideas live on GitHub.",
+    "lead": "Release notes land on Telegram first. Code, issues and ideas live on GitHub.",
     "telegramTitle": "Telegram channel",
-    "telegramLine": "Release notes, screenshots and the fastest answers.",
+    "telegramLine": "Release notes, screenshots and the quickest answers.",
     "telegramCta": "Open Telegram",
     "githubTitle": "GitHub",
     "githubLine": "Read the code, report a bug, or send an improvement.",
     "githubCta": "Open GitHub",
     "donateTitle": "Support it",
-    "donateLine": "If cloud3 earned a place on your phone, a small donation keeps it going. Never required.",
+    "donateLine": "If cloud3 has earned a place on your phone, a small donation keeps it going. Never required.",
     "donateCta": "Donate"
   },
   "footer": {
@@ -218,7 +218,7 @@
       },
       {
         "h": "Extensions are outside software",
-        "p": "The extensions and sources they point at are written and maintained by other people. cloud3 does not control them, does not review what they show, and cannot vouch for their legality where you live. You are responsible for what you add and for following the laws that apply to you."
+        "p": "The extensions and the sources they point at are written and maintained by other people. cloud3 does not control them, does not review what they show, and cannot vouch for their legality where you live. You are responsible for what you add and for following the laws that apply to you."
       },
       {
         "h": "No affiliation",
@@ -242,7 +242,7 @@
       },
       {
         "h": "Artwork and characters",
-        "p": "The Makima image at the top of the page is fan art of a Chainsaw Man character, and its rights belong to their owners. It is not part of cloud3 and implies no affiliation. The record artwork and audio files come from the bundled Vinyl project."
+        "p": "The Yoru artwork at the top of the page is fan art of a Chainsaw Man character, and its rights belong to their owners. It is not part of cloud3 and implies no affiliation. The record artwork and audio files come from the bundled Vinyl project."
       }
     ],
     "back": "Back to the home page"

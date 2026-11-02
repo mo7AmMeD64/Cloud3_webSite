@@ -79,47 +79,58 @@
 </section>
 
 <section class="section music" id="music" data-player>
-  <div class="wrap music__inner">
-    <div class="music__art" data-disc>
-      <div class="disc" aria-hidden="true">
-        <img src="{{album.art}}" alt="" width="420" height="420" loading="lazy" decoding="async">
-      </div>
-      <div class="cover">
-        <img src="{{album.art}}" alt="{{t.music.album}} — {{t.music.artist}}" width="420" height="420" loading="lazy" decoding="async">
-        <span class="cover__label"><b>{{t.music.artist}}</b>{{t.music.album}}</span>
-      </div>
-    </div>
-    <div class="music__body">
+  <div class="wrap">
+    <header class="music__head">
       <p class="eyebrow" data-reveal>{{t.music.eyebrow}}</p>
-      <h2 class="section-title" data-reveal>{{t.music.title}}</h2>
-      <p class="section-lead" data-reveal>{{t.music.lead}}</p>
+      <h2 class="music__title" data-reveal>{{t.music.album}}</h2>
+      <p class="music__byline" data-reveal>
+        <span class="music__artist">{{t.music.artist}}</span>
+        <span class="music__dot" aria-hidden="true"></span>
+        <span>{{t.music.title}}</span>
+      </p>
+    </header>
 
-      <div class="player" data-reveal>
-        <button class="player__play" type="button" data-play aria-label="{{t.music.play}}" data-label-play="{{t.music.play}}" data-label-pause="{{t.music.pause}}" aria-pressed="false">
-          <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L18.5 12 8 5.2Z"/></svg>
-          <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg>
-        </button>
-        <div class="player__mid">
-          <span class="player__now" data-now>{{t.music.listen}}</span>
-          <div class="player__bar" aria-hidden="true"><i data-bar></i></div>
+    <div class="music__inner">
+      <div class="music__art" data-disc>
+        <div class="disc" aria-hidden="true">
+          <img src="{{album.art}}" alt="" width="420" height="420" loading="lazy" decoding="async">
         </div>
-        <span class="player__time" data-time>0:00</span>
+        <div class="cover">
+          <img src="{{album.art}}" alt="{{t.music.album}} — {{t.music.artist}}" width="420" height="420" loading="lazy" decoding="async">
+          <span class="cover__label"><b>{{t.music.artist}}</b>{{t.music.album}}</span>
+        </div>
       </div>
 
-      <ol class="tracks">
-        {{#each album.tracks}}
-        <li>
-          <button class="track" type="button" data-track="{{@index}}" data-src="{{src}}" aria-pressed="false">
-            <span class="track__n" aria-hidden="true">{{num}}</span>
-            <span class="track__t">{{title}}</span>
-            <span class="track__d">{{dur}}</span>
-          </button>
-        </li>
-        {{/each}}
-      </ol>
+      <div class="music__body">
+        <p class="section-lead music__lead" data-reveal>{{t.music.lead}}</p>
 
-      <p class="music__note">{{t.music.note}} <a href="{{root}}vinyl/index.html">{{t.music.full}}</a></p>
-      <audio data-audio preload="none"></audio>
+        <div class="player" data-reveal>
+          <button class="player__play" type="button" data-play aria-label="{{t.music.play}}" data-label-play="{{t.music.play}}" data-label-pause="{{t.music.pause}}" aria-pressed="false">
+            <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L18.5 12 8 5.2Z"/></svg>
+            <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg>
+          </button>
+          <div class="player__mid">
+            <span class="player__now" data-now aria-live="polite">{{t.music.listen}}</span>
+            <div class="player__bar" aria-hidden="true"><i data-bar></i></div>
+          </div>
+          <span class="player__time" data-time>0:00</span>
+        </div>
+
+        <p class="tracks__label">{{t.music.tracks}}</p>
+        <ol class="tracks">
+          {{#each album.tracks}}
+          <li>
+            <button class="track" type="button" data-track="{{@index}}" data-src="{{src}}" aria-pressed="false">
+              <span class="track__n" aria-hidden="true">{{num}}</span>
+              <span class="track__t">{{title}}</span>
+              <span class="track__d">{{dur}}</span>
+            </button>
+          </li>
+          {{/each}}
+        </ol>
+
+        <audio data-audio preload="none"></audio>
+      </div>
     </div>
   </div>
 </section>

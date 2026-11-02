@@ -15,7 +15,6 @@
     if (open) menu.removeAttribute('inert'); else menu.setAttribute('inert', '');
     if (openBtn) openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
     doc.classList.toggle('menu-open', open);
-    document.body.style.overflow = open ? 'hidden' : '';
     if (open) {
       lastFocus = document.activeElement;
       var first = menu.querySelector('a, button');
@@ -34,7 +33,14 @@
     });
   }
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && menu && menu.classList.contains('is-open')) setMenu(false);
+    if (!menu || !menu.classList.contains('is-open')) return;
+    if (e.key === 'Escape') { setMenu(false); return; }
+    if (e.key !== 'Tab') return;
+    var f = menu.querySelectorAll('a[href], button:not([disabled])');
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
   try {
     var wide = window.matchMedia('(min-width: 901px)');

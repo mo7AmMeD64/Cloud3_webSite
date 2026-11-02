@@ -260,7 +260,7 @@ function buildPageData(lang, kind) {
     const big = set['900'] || set['760'];
     const small = set['620'] || set['480'];
     const width = id === 'makima' ? 620 : (screensData.items.find((s) => s.img === id) || {}).width || 620;
-    const height = id === 'makima' ? 978 : (screensData.items.find((s) => s.img === id) || {}).height || 978;
+    const height = id === 'makima' ? 1335 : (screensData.items.find((s) => s.img === id) || {}).height || 978;
     return {
       src: `${root}assets/${big}`,
       srcset: `${root}assets/${small} ${id === 'makima' ? 620 : 480}w, ${root}assets/${big} ${id === 'makima' ? 900 : 760}w`,

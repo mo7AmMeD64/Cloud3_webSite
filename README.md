@@ -6,7 +6,7 @@ The official one-page site for **cloud3**, the Android app for movies, series an
 - English home: `/en/`
 - Legal: `/legal/` and `/en/legal/`
 - 404: `/404.html`
-- The Vinyl record player is embedded in the home page; `/vinyl/` is its full-screen version.
+- The Vinyl record player lives in the home page's music section; there is no separate player page.
 
 Static pages, no framework, no runtime dependencies. `build.mjs` renders the HTML from templates and JSON, bundles and
 fingerprints the CSS/JS, and writes `dist/`.
@@ -16,7 +16,7 @@ fingerprints the CSS/JS, and writes `dist/`.
 ```bash
 node build.mjs        # writes dist/
 npm ci && npx playwright install chromium
-node tests/check.mjs  # serves dist under /Cloud3_webSite/ and runs 165 checks
+node tests/check.mjs  # serves dist under /Cloud3_webSite/ and runs the full browser suite
 ```
 
 `tests/check.mjs` covers both languages at 390x844, 768x1024 and 1440x900: no horizontal scroll, console errors, one

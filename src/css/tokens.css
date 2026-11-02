@@ -37,9 +37,18 @@
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --press: 0.12s;
 
   --nav-h: 68px;
   color-scheme: dark;
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --border: rgb(255 255 255 / 0.22);
+    --border-strong: rgb(255 255 255 / 0.38);
+    --muted: #c6c6ce;
+  }
 }
 
 html[lang='ar'] { --font: var(--font-ar); }

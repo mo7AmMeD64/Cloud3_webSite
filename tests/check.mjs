@@ -104,8 +104,10 @@ check('dist favicons', ['favicon-32.png', 'apple-touch-icon.png', 'icon-192.png'
 check('dist sitemap/robots/manifest/.nojekyll',
   ['sitemap.xml', 'robots.txt', 'manifest.webmanifest', '.nojekyll'].every((f) => existsSync(path.join(DIST, f))));
 check('dist og image 1200x630', await jpegSize(path.join(DIST, 'og.jpg')).then((s) => s === '1200x630'));
-check('dist vinyl player + tracks', ['index.html', 'tracks/firepower.mp3', 'tracks/i-dont-know-erika.mp3', 'tracks/candy.mp3']
+check('dist vinyl tracks', ['tracks/firepower.mp3', 'tracks/i-dont-know-erika.mp3', 'tracks/candy.mp3']
   .every((f) => existsSync(path.join(DIST, 'vinyl', f))));
+check('dist has no separate vinyl page', !existsSync(path.join(DIST, 'vinyl', 'index.html')));
+check('home: player lives on the page', !/vinyl\/index\.html/.test(home));
 
 async function jpegSize(file) {
   const buf = readFileSync(file);
@@ -164,7 +166,6 @@ async function newPage({ width = 1440, height = 900, lang = 'ar', js = true, mot
 const settle = (page) => page.waitForTimeout(900);
 
 /* ---------------------------------------------------------- matrix */
-
 const viewports = [[390, 844], [768, 1024], [1440, 900]];
 const langs = [['ar', ''], ['en', 'en/']];
 
@@ -216,6 +217,42 @@ for (const [lang, prefix] of langs) {
     }
     await context.close();
   }
+}
+
+/* ------------------------------------------------------- mobile menu */
+
+{
+  const { context, page } = await newPage({ width: 390, height: 844, lang: 'en' });
+  await page.goto(BASE + 'en/', { waitUntil: 'load' });
+  await page.waitForTimeout(600);
+
+  await page.click('[data-menu-open]');
+  await page.waitForTimeout(450);
+  const open = await page.evaluate(() => ({
+    open: document.querySelector('[data-menu]').classList.contains('is-open'),
+    lock: getComputedStyle(document.documentElement).overflow,
+    expanded: document.querySelector('[data-menu-open]').getAttribute('aria-expanded'),
+    focus: document.activeElement.getAttribute('href') || document.activeElement.tagName
+  }));
+  check('menu: opens and locks the page', open.open && open.lock === 'hidden' && open.expanded === 'true', JSON.stringify(open));
+
+  await page.evaluate(() => {
+    const f = document.querySelector('[data-menu]').querySelectorAll('a[href], button:not([disabled])');
+    f[0].focus();
+  });
+  await page.keyboard.press('Shift+Tab');
+  const wrapped = await page.evaluate(() => {
+    const f = document.querySelector('[data-menu]').querySelectorAll('a[href], button:not([disabled])');
+    return document.activeElement === f[f.length - 1];
+  });
+  check('menu: focus wraps inside the dialog', wrapped);
+
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+  check('menu: escape closes and restores scroll',
+    await page.evaluate(() => !document.querySelector('[data-menu]').classList.contains('is-open')
+      && getComputedStyle(document.documentElement).overflow !== 'hidden'));
+  await context.close();
 }
 
 /* --------------------------------------------- sections + screenshots */
@@ -429,17 +466,6 @@ for (const [lang, prefix] of langs) {
   check('no JS: download link points at releases', /releases\/latest$/.test(m.href || ''), String(m.href));
   check('no JS: hero art painted', m.figure >= 300, String(Math.round(m.figure)));
   check('no JS: tracks still listed', m.controls === 3, String(m.controls));
-  await context.close();
-}
-
-/* ------------------------------------------------------------ vinyl */
-
-{
-  const { context, page } = await newPage({});
-  await page.goto(BASE + 'vinyl/', { waitUntil: 'load' });
-  await page.waitForTimeout(800);
-  check('vinyl page loads', (await page.locator('h1').count()) === 1);
-  await page.screenshot({ path: path.join(SHOTS, 'vinyl.png') });
   await context.close();
 }
 

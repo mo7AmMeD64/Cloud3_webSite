@@ -60,9 +60,6 @@
     if (bar && d) bar.style.width = Math.min(100, (audio.currentTime / d) * 100) + '%';
     if (time) time.textContent = fmt(audio.currentTime);
   });
-  audio.addEventListener('loadedmetadata', function () {
-    if (time && isFinite(audio.duration)) time.textContent = fmt(audio.duration);
-  });
   audio.addEventListener('ended', function () {
     if (current < tracks.length - 1) select(current + 1, true);
     else {
