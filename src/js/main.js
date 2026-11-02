@@ -1,24 +1,6 @@
-/* Boot, menu, FAQ, cursor and small details. */
+/* Menu, FAQ, reveals. No framework, no scroll hijacking. */
 (function () {
   var doc = document.documentElement;
-  var C3 = window.C3 = window.C3 || {};
-  var fine = false;
-  try { fine = window.matchMedia('(pointer: fine)').matches; } catch (e) {}
-
-  C3.ready = function (fn) {
-    if (C3._ready) { fn(); return; }
-    (C3._q = C3._q || []).push(fn);
-  };
-  C3.fire = function () {
-    if (C3._ready) return;
-    C3._ready = true;
-    window.__c3 && (window.__c3.ready = true);
-    var queue = C3._q || [];
-    C3._q = [];
-    queue.forEach(function (fn) {
-      try { fn(); } catch (e) { /* one broken effect must not stop the rest */ }
-    });
-  };
 
   /* ---- Menu ---- */
   var menu = document.querySelector('[data-menu]');
@@ -59,7 +41,7 @@
     wide.addEventListener('change', function (e) { if (e.matches) setMenu(false); });
   } catch (e) {}
 
-  /* ---- FAQ ---- */
+  /* ---- FAQ: one open at a time ---- */
   var faqButtons = Array.prototype.slice.call(document.querySelectorAll('[data-faq-btn]'));
   faqButtons.forEach(function (btn, i) {
     var item = btn.closest('[data-faq]');
@@ -78,72 +60,30 @@
     });
   });
 
-  /* ---- Details that need a fine pointer and motion ---- */
-  var gsap = window.gsap;
-  var motion = !doc.classList.contains('lite') && !doc.classList.contains('reduce');
+  /* ---- Reveals: fade and lift once, on the way in ---- */
+  var items = [].slice.call(document.querySelectorAll('[data-reveal]'));
+  [].slice.call(document.querySelectorAll('[data-stagger]')).forEach(function (group) {
+    [].slice.call(group.children).forEach(function (child) { items.push(child); });
+  });
 
-  if (gsap && fine && motion) {
-    var ring = document.createElement('div');
-    var dot = document.createElement('div');
-    ring.className = 'cursor';
-    ring.setAttribute('aria-hidden', 'true');
-    dot.className = 'cursor-dot';
-    dot.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(ring);
-    document.body.appendChild(dot);
+  if (!items.length) return;
 
-    var rx = gsap.quickTo(ring, 'x', { duration: 0.45, ease: 'power3.out' });
-    var ry = gsap.quickTo(ring, 'y', { duration: 0.45, ease: 'power3.out' });
-    var dx = gsap.quickTo(dot, 'x', { duration: 0.1, ease: 'power3.out' });
-    var dy = gsap.quickTo(dot, 'y', { duration: 0.1, ease: 'power3.out' });
-    gsap.set([ring, dot], { xPercent: -50, yPercent: -50 });
+  var still = doc.classList.contains('reduce') || doc.classList.contains('lite') || !('IntersectionObserver' in window);
+  if (still) return;
 
-    // Only take over the cursor once it has actually moved.
-    function activate(e) {
-      gsap.set([ring, dot], { x: e.clientX, y: e.clientY });
-      doc.classList.add('has-cursor');
-      window.removeEventListener('pointermove', activate);
-    }
-    window.addEventListener('pointermove', activate, { passive: true });
+  items.forEach(function (el) { el.classList.add('reveal'); });
 
-    window.addEventListener('pointermove', function (e) {
-      rx(e.clientX); ry(e.clientY); dx(e.clientX); dy(e.clientY);
-    }, { passive: true });
-    document.addEventListener('pointerover', function (e) {
-      var hot = e.target.closest && e.target.closest('a, button, .screen-card, .feature');
-      doc.classList.toggle('is-hovering', !!hot);
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      var siblings = el.parentElement ? [].slice.call(el.parentElement.children) : [];
+      var i = Math.max(0, siblings.indexOf(el));
+      el.style.transitionDelay = (i * 60) + 'ms';
+      el.classList.add('is-in');
+      io.unobserve(el);
     });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
 
-    document.querySelectorAll('[data-magnetic]').forEach(function (el) {
-      el.addEventListener('pointermove', function (e) {
-        var r = el.getBoundingClientRect();
-        gsap.to(el, {
-          x: (e.clientX - r.left - r.width / 2) * 0.16,
-          y: (e.clientY - r.top - r.height / 2) * 0.24,
-          duration: 0.4, ease: 'power2.out', overwrite: 'auto'
-        });
-      });
-      el.addEventListener('pointerleave', function () {
-        gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)', overwrite: 'auto' });
-      });
-    });
-
-    document.querySelectorAll('.screen-card').forEach(function (el) {
-      el.addEventListener('pointermove', function (e) {
-        if (el.closest('.is-pinned')) return;
-        var r = el.getBoundingClientRect();
-        gsap.to(el, {
-          rotateY: ((e.clientX - r.left) / r.width - 0.5) * 6,
-          rotateX: ((e.clientY - r.top) / r.height - 0.5) * -6,
-          transformPerspective: 900,
-          duration: 0.5, overwrite: 'auto'
-        });
-      });
-      el.addEventListener('pointerleave', function () {
-        gsap.to(el, { rotateY: 0, rotateX: 0, duration: 0.7, ease: 'power3.out', overwrite: 'auto' });
-      });
-    });
-  }
-
-  if (!doc.classList.contains('is-loading')) C3.fire();
+  items.forEach(function (el) { io.observe(el); });
 })();

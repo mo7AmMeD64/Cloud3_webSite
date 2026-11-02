@@ -1,4 +1,4 @@
-/* Runs in <head>: feature flags, motion classes, intro gate. */
+/* Runs in <head>: JS flag, motion classes. Nothing is hidden without JS. */
 (function () {
   var h = document.documentElement;
   h.classList.add('js');
@@ -15,16 +15,5 @@
   if (lite) h.classList.add('lite');
   if (reduced) h.classList.add('reduce');
 
-  var intro = false;
-  if (!reduced) {
-    try { intro = !window.sessionStorage.getItem('c3-intro'); } catch (e) { intro = true; }
-  }
-  if (intro) h.classList.add('is-loading');
-
-  window.__c3 = { lite: !!lite, reduced: !!reduced, ready: false };
-
-  // Safety net: the page must never stay behind the loader if a script fails.
-  window.setTimeout(function () {
-    if (!window.__c3.ready) h.classList.remove('is-loading');
-  }, 2600);
+  window.__c3 = { lite: !!lite, reduced: !!reduced };
 })();

@@ -37,14 +37,11 @@
 </head>
 <body class="{{bodyClass}}">
 <a class="skip" href="#main">{{t.a11y.skip}}</a>
-<div class="progress" data-progress aria-hidden="true"></div>
 {{> nav}}
 <main id="main">
 {{{content}}}
 </main>
 {{> footer}}
-{{> loader}}
-<script src="{{root}}assets/{{vendorJs}}" defer></script>
 <script src="{{root}}assets/{{appJs}}" defer></script>
 </body>
 </html>

@@ -127,21 +127,15 @@ html[lang='ar'] .ghost { letter-spacing: 0; -webkit-text-stroke-width: 1px; }
 
 section[id] { scroll-margin-top: calc(var(--nav-h) + 12px); }
 
-/* Lenis (loaded by JS only) */
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-stopped { overflow: hidden; }
-
 /* Without JS the menu button is dead weight. */
 html:not(.js) .burger { display: none; }
 
-/* Scroll progress line */
-.progress {
-  position: fixed; inset-block-start: 0; inset-inline: 0; height: 2px; z-index: 120;
-  background: var(--accent); transform: scaleX(0); transform-origin: 0 50%;
-  will-change: transform;
+/* Reveals: the hidden state is added by JS, so nothing is lost without it. */
+.reveal { opacity: 0; transform: translateY(16px); }
+.reveal.is-in {
+  opacity: 1; transform: none;
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
 }
-html[dir='rtl'] .progress { transform-origin: 100% 50%; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

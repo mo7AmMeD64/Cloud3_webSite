@@ -1,8 +1,7 @@
 {
   "items": [
-    { "id": "home", "img": "home", "width": 760, "height": 1181 },
-    { "id": "library", "img": "library", "width": 760, "height": 1176 },
-    { "id": "details", "img": "details", "width": 760, "height": 1177 },
-    { "id": "settings", "img": "settings", "width": 760, "height": 1178 }
+    { "id": "home", "img": "home", "width": 760, "height": 1351 },
+    { "id": "library", "img": "library", "width": 760, "height": 1216 },
+    { "id": "details", "img": "details", "width": 760, "height": 1351 }
   ]
 }

@@ -1,24 +1,27 @@
 {
-  "app": "cloud3",
-  "appInternal": "KodaStream",
-  "version": "0.10.2",
-  "license": "GPL-3.0",
-  "minAndroid": 8,
-  "repo": "mo7AmMeD64/cloudSTREAM3",
   "siteUrl": "https://mo7ammed64.github.io/Cloud3_webSite/",
-  "basePath": "/Cloud3_webSite/",
   "github": "https://github.com/mo7AmMeD64/cloudSTREAM3",
   "telegram": "https://t.me/fullappk",
   "donate": "https://creators.sa/x3onq",
   "releasesApi": "https://api.github.com/repos/mo7AmMeD64/cloudSTREAM3/releases/latest",
-  "manga": {
-    "status": "soon",
-    "reason": "browse and library exist in main; no reader screen yet"
-  },
-  "screens": [
-    "home",
-    "library",
-    "details",
-    "settings"
-  ]
+  "album": {
+    "artist": "June Vale",
+    "tracks": [
+      {
+        "title": "Firepower",
+        "file": "vinyl/tracks/firepower.mp3",
+        "dur": "3:26"
+      },
+      {
+        "title": "I Don't Know Erika",
+        "file": "vinyl/tracks/i-dont-know-erika.mp3",
+        "dur": "2:43"
+      },
+      {
+        "title": "Candy",
+        "file": "vinyl/tracks/candy.mp3",
+        "dur": "0:52"
+      }
+    ]
+  }
 }

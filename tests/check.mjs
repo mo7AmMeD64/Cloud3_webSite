@@ -41,6 +41,7 @@ const TYPES = {
   '.svg': 'image/svg+xml',
   '.xml': 'application/xml',
   '.txt': 'text/plain; charset=utf-8',
+  '.mp3': 'audio/mpeg',
   '.webmanifest': 'application/manifest+json'
 };
 
@@ -91,12 +92,20 @@ for (const [file, lang, dir] of pages) {
   check(`${label}: og image`, /og:image" content="https:\/\/[^"]+og\.jpg"/.test(html));
 }
 
+const home = readFileSync(path.join(DIST, 'index.html'), 'utf8');
+check('home: no leftover sections', !/id="(manga|how)"|data-scene-tab|data-screens-track|data-loader/.test(home));
+check('home: music player markup', /data-player/.test(home) && (home.match(/data-track="/g) || []).length === 3);
+check('home: hero key art', /makima-900\.[a-f0-9]+\.webp/.test(home));
+check('home: album art', /album-420\.[a-f0-9]+\.webp/.test(home));
+
 check('dist has no un-fingerprinted css/js', !readdirSync(path.join(DIST, 'assets')).some((f) => /^[a-z]+\.(css|js)$/.test(f)));
 check('dist favicons', ['favicon-32.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png']
   .every((f) => existsSync(path.join(DIST, f))));
 check('dist sitemap/robots/manifest/.nojekyll',
   ['sitemap.xml', 'robots.txt', 'manifest.webmanifest', '.nojekyll'].every((f) => existsSync(path.join(DIST, f))));
 check('dist og image 1200x630', await jpegSize(path.join(DIST, 'og.jpg')).then((s) => s === '1200x630'));
+check('dist vinyl player + tracks', ['index.html', 'tracks/firepower.mp3', 'tracks/i-dont-know-erika.mp3', 'tracks/candy.mp3']
+  .every((f) => existsSync(path.join(DIST, 'vinyl', f))));
 
 async function jpegSize(file) {
   const buf = readFileSync(file);
@@ -164,9 +173,6 @@ for (const [lang, prefix] of langs) {
     const tag = `${lang} ${w}x${h}`;
     const { context, page } = await newPage({ width: w, height: h, lang });
     await page.goto(BASE + prefix, { waitUntil: 'load' });
-    await page.waitForFunction(() => !document.documentElement.classList.contains('is-loading'), null, { timeout: 3000 })
-      .catch(() => check(`${tag}: loader removed`, false));
-    check(`${tag}: loader removed`, !(await page.evaluate(() => document.documentElement.classList.contains('is-loading'))));
     await settle(page);
     const m = await page.evaluate(() => ({
       lang: document.documentElement.lang,
@@ -176,7 +182,9 @@ for (const [lang, prefix] of langs) {
       version: document.querySelector('[data-rel="version"]')?.textContent.trim(),
       notes: document.querySelector('[data-rel="notes"]')?.textContent.trim().length,
       link: document.querySelector('[data-rel="link"]')?.getAttribute('href'),
-      pins: document.querySelectorAll('[data-screen-card]').length
+      cards: document.querySelectorAll('[data-screen-card]').length,
+      figure: (() => { const i = document.querySelector('.hero__figure'); const r = i?.getBoundingClientRect(); return r ? Math.round(r.height) : 0; })(),
+      music: !!document.querySelector('[data-player]')
     }));
     check(`${tag}: html lang/dir`, m.lang === lang && m.dir === (lang === 'ar' ? 'rtl' : 'ltr'));
     check(`${tag}: no horizontal scroll`, m.hscroll <= 1, `${m.hscroll}px`);
@@ -184,7 +192,9 @@ for (const [lang, prefix] of langs) {
     check(`${tag}: release version ${VERSION}`, m.version === VERSION, String(m.version));
     check(`${tag}: release notes rendered`, m.notes > 20, String(m.notes));
     check(`${tag}: apk link is the release asset`, /releases\/download\/.+\/cloud3-.+\.apk$/.test(m.link || ''), String(m.link));
-    check(`${tag}: four screen cards`, m.pins === 4, String(m.pins));
+    check(`${tag}: three screen cards`, m.cards === 3, String(m.cards));
+    check(`${tag}: hero figure painted`, m.figure >= 300, String(m.figure));
+    check(`${tag}: music section present`, m.music);
     check(`${tag}: lite mode on phone`, w <= 600
       ? await page.evaluate(() => document.documentElement.classList.contains('lite'))
       : true);
@@ -196,6 +206,14 @@ for (const [lang, prefix] of langs) {
     check(`${tag}: hero title sized`, parseFloat(theme) >= 28, theme);
 
     await page.screenshot({ path: path.join(SHOTS, `${lang}-${w}-hero.png`) });
+
+    if (w <= 820) {
+      const snap = await page.evaluate(() => {
+        const el = document.querySelector('.screens__grid');
+        return { flow: getComputedStyle(el).scrollSnapType, over: el.scrollWidth > el.clientWidth + 4 };
+      });
+      check(`${tag}: screens row scrolls sideways`, snap.over && /x/.test(snap.flow), JSON.stringify(snap));
+    }
     await context.close();
   }
 }
@@ -205,9 +223,9 @@ for (const [lang, prefix] of langs) {
 for (const [lang, prefix] of langs) {
   const { context, page } = await newPage({ lang });
   await page.goto(BASE + prefix, { waitUntil: 'load' });
-  await page.waitForTimeout(1500);
+  await page.waitForTimeout(1200);
 
-  for (const id of ['features', 'screens', 'manga', 'download']) {
+  for (const id of ['features', 'screens', 'music', 'download', 'faq']) {
     await page.evaluate((id) => {
       const el = document.getElementById(id);
       window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 20);
@@ -215,32 +233,53 @@ for (const [lang, prefix] of langs) {
     await page.waitForTimeout(700);
     await page.screenshot({ path: path.join(SHOTS, `${lang}-${id}.png`) });
   }
+  await context.close();
+}
 
-  // The pinned reel must move sideways when the page scrolls.
-  if ((await page.viewportSize()).width > 900) {
-    await page.goto(BASE + prefix, { waitUntil: 'load' });
-    await page.evaluate(() => window.scrollTo(0, 0));
-    const pinned = await page.waitForFunction(() => {
-      const el = document.querySelector('[data-screens]');
-      return !!el && el.classList.contains('is-pinned') && !!window.ScrollTrigger;
-    }, null, { timeout: 10000 }).then(() => true).catch(() => false);
-    check(`${lang}: the reel pins on desktop`, pinned);
-    await page.evaluate(() => {
-      const el = document.getElementById('screens');
-      const hit = window.ScrollTrigger.getAll().find((t) => t.pin === el || t.trigger === el);
-      window.scrollTo(0, hit ? hit.start + 8 : el.getBoundingClientRect().top + window.scrollY);
-    });
-    await page.waitForTimeout(1200);
-    const before = await page.evaluate(() => document.querySelector('[data-screens-track]').getBoundingClientRect().left);
-    await page.mouse.move(700, 450);
-    for (let i = 0; i < 5; i++) { await page.mouse.wheel(0, 400); await page.waitForTimeout(120); }
-    await page.waitForTimeout(600);
-    await page.screenshot({ path: path.join(SHOTS, `${lang}-screens-mid.png`) });
-    for (let i = 0; i < 5; i++) { await page.mouse.wheel(0, 400); await page.waitForTimeout(120); }
-    await page.waitForTimeout(1100);
-    const after = await page.evaluate(() => document.querySelector('[data-screens-track]').getBoundingClientRect().left);
-    check(`${lang}: screens reel moves horizontally`, Math.abs(after - before) > 20, `${Math.round(before)} → ${Math.round(after)}`);
-  }
+/* ------------------------------------------------------------- music */
+
+{
+  const { context, page } = await newPage({ lang: 'en' });
+  await page.goto(BASE + 'en/#music', { waitUntil: 'load' });
+  await page.waitForTimeout(900);
+
+  await page.click('[data-play]');
+  await page.waitForTimeout(1200);
+  const playing = await page.evaluate(() => ({
+    paused: document.querySelector('[data-audio]').paused,
+    cls: document.querySelector('[data-player]').className,
+    label: document.querySelector('[data-play]').getAttribute('aria-label'),
+    now: document.querySelector('[data-now]').textContent.trim(),
+    disc: getComputedStyle(document.querySelector('.disc')).animationName
+  }));
+  check('music: play starts the audio', playing.paused === false, String(playing.paused));
+  check('music: playing state + pause label', /is-playing/.test(playing.cls) && /pause/i.test(playing.label), JSON.stringify(playing));
+  check('music: now playing shows the track', playing.now === 'Firepower', playing.now);
+  check('music: disc spins', playing.disc === 'spin', playing.disc);
+
+  await page.click('[data-play]');
+  await page.waitForTimeout(300);
+  check('music: pause stops the audio', await page.evaluate(() => document.querySelector('[data-audio]').paused));
+  check('music: pause clears the playing state',
+    await page.evaluate(() => !document.querySelector('[data-player]').classList.contains('is-playing')));
+
+  await page.click('[data-track="1"]');
+  await page.waitForTimeout(1200);
+  const second = await page.evaluate(() => ({
+    src: document.querySelector('[data-audio]').currentSrc,
+    pressed: [...document.querySelectorAll('[data-track]')].map((b) => b.getAttribute('aria-pressed')),
+    paused: document.querySelector('[data-audio]').paused
+  }));
+  check('music: track row switches the source', /i-dont-know-erika\.mp3$/.test(second.src), second.src);
+  check('music: one track marked pressed', second.pressed.join(',') === 'false,true,false', second.pressed.join(','));
+  check('music: picking a track plays it', second.paused === false, String(second.paused));
+
+  const label = await page.evaluate(() => {
+    const btn = document.querySelector('[data-track="1"]');
+    return btn.getBoundingClientRect().height;
+  });
+  check('music: track rows are 44px tall', label >= 44, String(label));
+  await page.screenshot({ path: path.join(SHOTS, 'en-music-playing.png') });
   await context.close();
 }
 
@@ -320,23 +359,6 @@ for (const [lang, prefix] of langs) {
   await page.goto(BASE + 'en/', { waitUntil: 'load' });
   await page.waitForTimeout(1600);
 
-  await page.focus('body');
-  await page.keyboard.press('ArrowRight');
-  await page.waitForTimeout(500);
-  const scene = await page.evaluate(() => {
-    const active = document.querySelector('.scene.is-active');
-    const tab = document.querySelector('[data-scene-tab][aria-selected="true"]');
-    return { active: active?.id, tab: tab?.getAttribute('data-scene-tab') };
-  });
-  check('hero arrow key changes the scene', scene.active !== 'scene-watch' && scene.tab !== '0', JSON.stringify(scene));
-
-  const paused = await page.evaluate(async () => {
-    const btn = document.querySelector('[data-hero-toggle]');
-    btn.click();
-    return btn.getAttribute('aria-pressed');
-  });
-  check('hero pause control toggles', paused === 'true', String(paused));
-
   await page.evaluate(() => document.querySelector('[data-faq-btn]').focus());
   await page.keyboard.press('Enter');
   await page.waitForTimeout(400);
@@ -376,16 +398,19 @@ for (const [lang, prefix] of langs) {
   const { context, page } = await newPage({ motion: 'reduce' });
   await page.goto(BASE + 'en/', { waitUntil: 'load' });
   await page.waitForTimeout(800);
-  const m = await page.evaluate(() => ({
-    reduce: document.documentElement.classList.contains('reduce'),
-    loader: document.documentElement.classList.contains('is-loading'),
-    lenis: document.documentElement.classList.contains('lenis'),
-    marquee: getComputedStyle(document.querySelector('.marquee__track')).animationName
-  }));
-  check('reduced motion: class + no intro', m.reduce && !m.loader);
-  check('reduced motion: no smooth scrolling', !m.lenis);
-  check('reduced motion: marquee still', m.marquee === 'none', m.marquee);
-  check('reduced motion: content visible', (await page.locator('h1').isVisible()));
+  const m = await page.evaluate(() => {
+    document.querySelector('[data-player]').classList.add('is-playing');
+    return {
+      reduce: document.documentElement.classList.contains('reduce'),
+      reveals: document.querySelectorAll('.reveal').length,
+      disc: getComputedStyle(document.querySelector('.disc')).animationName,
+      hero: document.querySelector('.hero__title').getBoundingClientRect().height
+    };
+  });
+  check('reduced motion: class set', m.reduce);
+  check('reduced motion: nothing hidden for reveals', m.reveals === 0, String(m.reveals));
+  check('reduced motion: disc still', m.disc === 'none', m.disc);
+  check('reduced motion: content visible', m.hero > 20, String(m.hero));
   await context.close();
 }
 
@@ -396,12 +421,25 @@ for (const [lang, prefix] of langs) {
     h1: document.querySelector('h1').textContent.trim().length,
     answers: [...document.querySelectorAll('.faq__a')].filter((el) => el.getBoundingClientRect().height > 10).length,
     href: document.querySelector('[data-rel="link"]')?.getAttribute('href'),
-    loader: getComputedStyle(document.querySelector('.loader')).display
+    figure: document.querySelector('.hero__figure').getBoundingClientRect().height,
+    controls: document.querySelectorAll('[data-track]').length
   }));
   check('no JS: heading readable', m.h1 > 5, String(m.h1));
   check('no JS: faq answers open', m.answers >= 4, String(m.answers));
   check('no JS: download link points at releases', /releases\/latest$/.test(m.href || ''), String(m.href));
-  check('no JS: no loader overlay', m.loader === 'none', m.loader);
+  check('no JS: hero art painted', m.figure >= 300, String(Math.round(m.figure)));
+  check('no JS: tracks still listed', m.controls === 3, String(m.controls));
+  await context.close();
+}
+
+/* ------------------------------------------------------------ vinyl */
+
+{
+  const { context, page } = await newPage({});
+  await page.goto(BASE + 'vinyl/', { waitUntil: 'load' });
+  await page.waitForTimeout(800);
+  check('vinyl page loads', (await page.locator('h1').count()) === 1);
+  await page.screenshot({ path: path.join(SHOTS, 'vinyl.png') });
   await context.close();
 }
 

@@ -1,54 +1,5 @@
-/* Overlays and the two small pages: loader, cursor, legal, 404. */
+/* Small pages: legal and 404. */
 
-/* Intro loader (only shown after JS asks for it) */
-.loader {
-  display: none;
-  position: fixed; inset: 0; z-index: 300;
-  place-items: center;
-  background: var(--bg-deep);
-  color: var(--text);
-}
-html.is-loading .loader { display: grid; }
-.loader__inner {
-  position: relative; z-index: 2;
-  display: flex; flex-direction: column; align-items: center; gap: 18px;
-}
-.loader__inner img { width: 58px; height: 58px; border-radius: 16px; }
-.loader__count {
-  font-size: 12px; font-weight: 700; letter-spacing: 0.28em;
-  color: var(--muted); font-variant-numeric: tabular-nums;
-}
-.loader__bar { width: 120px; height: 1px; background: var(--border-strong); overflow: hidden; }
-.loader__bar b { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; }
-html[dir='rtl'] .loader__bar b { transform-origin: 100% 50%; }
-.loader__circle {
-  position: absolute; z-index: 1;
-  width: 12vmax; aspect-ratio: 1; border-radius: 50%;
-  background: var(--accent);
-  transform: scale(0);
-  will-change: transform;
-}
-.loader.is-out .loader__inner { opacity: 0; transform: scale(0.96); transition: opacity 0.3s, transform 0.3s var(--ease-out); }
-.loader.is-out .loader__circle { transform: scale(28); transition: transform 0.7s var(--ease-in-out); }
-
-/* Custom cursor: pointer-fine only, added by JS */
-.cursor, .cursor-dot {
-  position: fixed; z-index: 250; inset-block-start: 0; inset-inline-start: 0;
-  pointer-events: none; border-radius: 50%;
-  opacity: 0; will-change: transform;
-}
-.cursor {
-  width: 34px; height: 34px; border: 1px solid rgb(255 255 255 / 0.6);
-  transition: width 0.25s var(--ease-out), height 0.25s var(--ease-out), background-color 0.25s, opacity 0.2s;
-}
-.cursor-dot { width: 5px; height: 5px; background: var(--accent); }
-html.has-cursor .cursor, html.has-cursor .cursor-dot { opacity: 1; }
-html.has-cursor.is-hovering .cursor { width: 54px; height: 54px; background: rgb(229 51 63 / 0.16); border-color: var(--accent); }
-html.has-cursor.is-hovering .cursor-dot { opacity: 0; }
-html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
-@media (pointer: coarse) { html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: auto; } }
-
-/* Small pages */
 .page-hero {
   position: relative; overflow: clip;
   padding-block: calc(var(--nav-h) + clamp(56px, 9vw, 110px)) clamp(36px, 5vw, 60px);

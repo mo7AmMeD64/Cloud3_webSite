@@ -1,12 +1,12 @@
 # cloud3 website
 
-The official site for **cloud3**, the Android app for movies, series and (soon) manga.
+The official one-page site for **cloud3**, the Android app for movies, series and (soon) manga.
 
 - Arabic home (RTL): `/`
 - English home: `/en/`
 - Legal: `/legal/` and `/en/legal/`
 - 404: `/404.html`
-- The Vinyl record-player demo from the first build lives at `/vinyl/`.
+- The Vinyl record player is embedded in the home page; `/vinyl/` is its full-screen version.
 
 Static pages, no framework, no runtime dependencies. `build.mjs` renders the HTML from templates and JSON, bundles and
 fingerprints the CSS/JS, and writes `dist/`.
@@ -16,13 +16,13 @@ fingerprints the CSS/JS, and writes `dist/`.
 ```bash
 node build.mjs        # writes dist/
 npm ci && npx playwright install chromium
-node tests/check.mjs  # serves dist under /Cloud3_webSite/ and runs 142 checks
+node tests/check.mjs  # serves dist under /Cloud3_webSite/ and runs 165 checks
 ```
 
 `tests/check.mjs` covers both languages at 390x844, 768x1024 and 1440x900: no horizontal scroll, console errors, one
-`h1`, the release card with a mocked GitHub response / an error / offline, language switch with the section hash,
-keyboard control of the hero and the FAQ, reduced motion, lite mode, JavaScript disabled, and it writes screenshots to
-`tests/screenshots/`.
+`h1`, the hero key art painting, the three screen cards, the music player (play, pause, track switch), the release card
+with a mocked GitHub response / an error / offline, language switch with the section hash, the FAQ by keyboard, reduced
+motion, lite mode, JavaScript disabled, and it writes screenshots to `tests/screenshots/`.
 
 ## Edit the text
 
@@ -30,36 +30,29 @@ All copy is in `src/i18n/ar.json` and `src/i18n/en.json`. Keep the two files str
 needs the same key in the other. Text is plain; the release-notes area is the only place that renders a little Markdown
 (`**bold**`, `` `code` ``, links), and it does so with an allow-list, never `innerHTML` of raw input.
 
-Fixed links, phone number-free contact and the release API live in `src/data/site.json`.
+Fixed links and the release API live in `src/data/site.json`. The track list and the release-snapshot are in the same
+folder.
 
-## Flip the manga status
+## The manga card
 
-`src/data/site.json`:
-
-```json
-"manga": { "status": "soon" }
-```
-
-- `"soon"` → badge "SOON" and the "reader is still being finished" line.
-- `"beta"` → badge "BETA" and the beta line.
-- `"live"` → no "coming" line (needs the `badgeLive` / `statusLive` keys in both JSON files).
-
-The section never claims the reader works while the flag says otherwise.
+The site carries no manga section: the manga feature card says "Soon" via `features.items[1].tag` in both i18n files.
+Delete the `tag` key when the reader ships, and reword the line next to it. Never claim the reader works while it does
+not.
 
 ## Add or replace a screenshot
 
-1. Drop the full-size JPG in `src/assets/shots/` (about 1540 px wide is enough).
+1. Drop the full-size PNG/JPG in `src/assets/shots/`.
 2. Produce the two responsive sizes:
    ```bash
-   magick shots/home.jpg -resize 760x -strip -quality 74 img/home-760.webp
-   magick shots/home.jpg -resize 480x -strip -quality 72 img/home-480.webp
+   magick shots/home.png -resize 760x -strip -quality 74 img/home-760.webp
+   magick shots/home.png -resize 480x -strip -quality 72 img/home-480.webp
    ```
    (ImageMagick is optional; any tool that writes WebP works.)
 3. Add the entry to `src/data/screens.json` with the real pixel width/height of the 760 px file.
 4. Add the matching `id` + caption to `screens.items` in both `ar.json` and `en.json`.
-5. If the screen also appears in the hero or the pinned reel, no change is needed: those read the same data.
 
-The build fingerprints the images and emits `srcset`, so old cache entries never mix with new files.
+The frames are a fixed 9:16, so a screenshot with another ratio is letterboxed rather than cropped. The build
+fingerprints the images and emits `srcset`, so old cache entries never mix with new files.
 
 ## The download card
 
@@ -69,7 +62,8 @@ The build fingerprints the images and emits `srcset`, so old cache entries never
 1. API → 2. `release.json` snapshot committed in `src/data/release.json` (the workflow overwrites it on every run) →
 3. the plain "latest release" link with no version text, plus an offline note.
 
-The version, date, size, notes and the APK button all come from that one record.
+The version, date, size, notes and the APK button all come from that one record. Nothing else on the page repeats the
+version, so the card is the only place to update when a release ships.
 
 ## Deploy
 

@@ -31,8 +31,6 @@ const releaseSnapshot = existsSync(path.join(ROOT, 'src/data/release.json'))
   ? read('src/data/release.json')
   : '{}';
 
-const statusKey = String(site.manga.status || 'soon').toLowerCase();
-const statusSuffix = statusKey.charAt(0).toUpperCase() + statusKey.slice(1);
 
 /* --------------------------------------------------------------- cleaning */
 
@@ -81,10 +79,10 @@ function minifyCss(css) {
 
 const cssOrder = [
   'css/fonts.css', 'css/tokens.css', 'css/base.css',
-  'css/sections/nav.css', 'css/sections/hero.css', 'css/sections/marquee.css',
-  'css/sections/features.css', 'css/sections/screens.css', 'css/sections/manga.css',
-  'css/sections/how.css', 'css/sections/download.css', 'css/sections/faq.css',
-  'css/sections/community.css', 'css/sections/footer.css', 'css/overlay.css'
+  'css/sections/nav.css', 'css/sections/hero.css', 'css/sections/features.css',
+  'css/sections/screens.css', 'css/sections/music.css', 'css/sections/download.css',
+  'css/sections/faq.css', 'css/sections/community.css', 'css/sections/footer.css',
+  'css/overlay.css'
 ];
 const cssSource = cssOrder.map((f) => `/* ${f} */\n${read('src/' + f)}`).join('\n');
 const cssName = `app.${hash(cssSource)}.css`;
@@ -94,15 +92,10 @@ const headSource = ['js/lite.js', 'js/i18n-switch.js'].map((f) => read('src/' + 
 const headName = `head.${hash(headSource)}.js`;
 write(`assets/${headName}`, headSource);
 
-const appSource = ['js/main.js', 'js/loader.js', 'js/hero.js', 'js/scroll.js', 'js/download.js']
+const appSource = ['js/main.js', 'js/music.js', 'js/download.js']
   .map((f) => read('src/' + f)).join('\n;\n');
 const appName = `app.${hash(appSource)}.js`;
 write(`assets/${appName}`, appSource);
-
-const vendorSource = ['vendor/gsap.min.js', 'vendor/ScrollTrigger.min.js', 'vendor/lenis.min.js']
-  .map((f) => read('src/' + f)).join('\n;\n');
-const vendorName = `vendor.${hash(vendorSource)}.js`;
-write(`assets/${vendorName}`, vendorSource);
 
 /* ------------------------------------------------------------------- CNC */
 
@@ -246,10 +239,8 @@ function buildPageData(lang, kind) {
   const legalHref = `${selfPrefix}legal/index.html`;
   const navPrefix = kind === 'home' || kind === 'enHome' ? '#' : `${homeHref}#`;
 
-  const featureItems = t.features.items.map((item, i) => Object.assign({}, item, {
-    svg: ICONS[item.icon] || '',
-    lead: i === 0 ? 'feature--lead' : '',
-    leadMark: i === 0 ? String(t.features.items.length) : ''
+  const featureItems = t.features.items.map((item) => Object.assign({}, item, {
+    svg: ICONS[item.icon] || ''
   }));
 
   const reel = t.screens.items.map((item, i) => {
@@ -265,28 +256,24 @@ function buildPageData(lang, kind) {
   });
 
   function heroImage(id, alt) {
-    const meta = screensData.items.find((s) => s.id === id) || screensData.items[0];
-    const set = images[meta.img] || images.home;
+    const set = images[id] || images.home;
+    const big = set['900'] || set['760'];
+    const small = set['620'] || set['480'];
+    const width = id === 'makima' ? 620 : (screensData.items.find((s) => s.img === id) || {}).width || 620;
+    const height = id === 'makima' ? 978 : (screensData.items.find((s) => s.img === id) || {}).height || 978;
     return {
-      src: `${root}assets/${set['760']}`,
-      srcset: `${root}assets/${set['480']} 480w, ${root}assets/${set['760']} 760w`,
-      width: meta.width,
-      height: meta.height,
+      src: `${root}assets/${big}`,
+      srcset: `${root}assets/${small} ${id === 'makima' ? 620 : 480}w, ${root}assets/${big} ${id === 'makima' ? 900 : 760}w`,
+      width,
+      height,
       alt
     };
   }
 
-  const heroScenes = t.hero.scenes.map((scene, i) => Object.assign({}, scene, {
-    idx: i,
-    selected: i === 0 ? 'true' : 'false',
-    tabindex: i === 0 ? '0' : '-1'
-  }));
-
-  let preloadImage = '';
-  if (kind === 'home' || kind === 'enHome') {
-    const hero = heroImage('home', t.screens.items[0].alt);
-    preloadImage = `<link rel="preload" as="image" href="${hero.src}" imagesrcset="${hero.srcset}" imagesizes="(max-width: 900px) 56vw, 300px" fetchpriority="high">`;
-  }
+  const hero = heroImage('makima', t.hero.alt);
+  const preloadImage = kind === 'home' || kind === 'enHome'
+    ? `<link rel="preload" as="image" href="${hero.src}" imagesrcset="${hero.srcset}" imagesizes="(max-width: 820px) 62vw, 46vw" fetchpriority="high">`
+    : '';
 
   return {
     lang,
@@ -321,18 +308,18 @@ function buildPageData(lang, kind) {
     css: cssName,
     headJs: headName,
     appJs: appName,
-    vendorJs: vendorName,
     preloadImage,
     features: { items: featureItems },
     screens: { items: reel },
-    hero: Object.assign({}, t.hero, { scenes: heroScenes }),
-    heroWatch: heroImage('home', t.screens.items[0].alt),
-    heroLibrary: heroImage('library', t.screens.items[1].alt),
-    manga: Object.assign({}, t.manga, {
-      badge: t.manga[`badge${statusSuffix}`] || t.manga.badgeSoon,
-      statusText: t.manga[`status${statusSuffix}`] || t.manga.statusSoon,
-      bullets: t.manga.bullets.map((text) => ({ text }))
-    })
+    hero: Object.assign({}, t.hero),
+    heroImage: hero,
+    album: {
+      art: `${root}assets/${images.album['420']}`,
+      tracks: site.album.tracks.map((track, i) => Object.assign({}, track, {
+        num: String(i + 1).padStart(2, '0'),
+        src: `${root}${track.file}`
+      }))
+    }
   };
 }
 
