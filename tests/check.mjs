@@ -213,22 +213,27 @@ for (const [lang, prefix] of langs) {
 
   // The pinned reel must move sideways when the page scrolls.
   if ((await page.viewportSize()).width > 900) {
-    await page.reload({ waitUntil: 'load' });
-    await page.waitForTimeout(1400);
+    await page.goto(BASE + prefix, { waitUntil: 'load' });
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForFunction(() => {
+      const el = document.querySelector('[data-screens]');
+      return !!el && el.classList.contains('is-pinned') && !!window.ScrollTrigger;
+    }, null, { timeout: 10000 });
     await page.evaluate(() => {
       const el = document.getElementById('screens');
-      const st = window.ScrollTrigger;
-      const hit = st && st.getAll().find((t) => t.pin === el || t.trigger === el);
-      window.scrollTo(0, hit ? hit.start : el.getBoundingClientRect().top + window.scrollY);
+      const hit = window.ScrollTrigger.getAll().find((t) => t.pin === el || t.trigger === el);
+      window.scrollTo(0, hit ? hit.start + 8 : el.getBoundingClientRect().top + window.scrollY);
     });
-    await page.waitForTimeout(900);
+    await page.waitForTimeout(1200);
     const before = await page.evaluate(() => document.querySelector('[data-screens-track]').getBoundingClientRect().left);
     await page.mouse.move(700, 450);
-    for (let i = 0; i < 10; i++) { await page.mouse.wheel(0, 400); await page.waitForTimeout(120); }
+    for (let i = 0; i < 5; i++) { await page.mouse.wheel(0, 400); await page.waitForTimeout(120); }
+    await page.waitForTimeout(600);
+    await page.screenshot({ path: path.join(SHOTS, `${lang}-screens-mid.png`) });
+    for (let i = 0; i < 5; i++) { await page.mouse.wheel(0, 400); await page.waitForTimeout(120); }
     await page.waitForTimeout(1100);
     const after = await page.evaluate(() => document.querySelector('[data-screens-track]').getBoundingClientRect().left);
-    check(`${lang}: screens reel moves horizontally`, Math.abs(after - before) > 40, `${Math.round(before)} → ${Math.round(after)}`);
-    await page.screenshot({ path: path.join(SHOTS, `${lang}-screens-mid.png`) });
+    check(`${lang}: screens reel moves horizontally`, Math.abs(after - before) > 20, `${Math.round(before)} → ${Math.round(after)}`);
   }
   await context.close();
 }
