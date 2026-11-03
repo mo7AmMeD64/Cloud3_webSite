@@ -273,6 +273,120 @@ for (const [lang, prefix] of langs) {
   await context.close();
 }
 
+/* ------------------------------------------- screens focus + parallax */
+
+{
+  const { context, page } = await newPage({ width: 1440, height: 900, lang: 'en' });
+  await page.goto(BASE + 'en/', { waitUntil: 'load' });
+  await page.waitForTimeout(1000);
+  await page.evaluate(() => {
+    const el = document.getElementById('screens');
+    window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 20);
+  });
+  await page.waitForTimeout(900);
+
+  const strip = await page.evaluate(() => {
+    const grid = document.querySelector('.screens__grid');
+    const cards = [...grid.querySelectorAll('[data-screen-card]')];
+    return {
+      strip: grid.classList.contains('is-strip'),
+      active: cards.findIndex((c) => c.classList.contains('is-active')),
+      meta: cards.map((c) => getComputedStyle(c.querySelector('.screen-card__meta')).opacity),
+      line: cards.map((c) => getComputedStyle(c.querySelector('.screen-card__line')).opacity)
+    };
+  });
+  check('screens: centre plate focused by default', strip.strip && strip.active === 1, JSON.stringify(strip));
+  check('screens: only the focused caption shows',
+    strip.meta[1] === '1' && strip.meta[0] === '0' && strip.meta[2] === '0' && strip.line[1] === '1',
+    JSON.stringify(strip.meta));
+
+  await page.locator('[data-screen-focus]').nth(2).click();
+  await page.waitForTimeout(1100);
+  const focused = await page.evaluate(() => {
+    const grid = document.querySelector('.screens__grid');
+    const cards = [...grid.querySelectorAll('[data-screen-card]')];
+    return {
+      active: cards.findIndex((c) => c.classList.contains('is-active')),
+      widths: cards.map((c) => Math.round(c.getBoundingClientRect().width)),
+      meta: cards.map((c) => getComputedStyle(c.querySelector('.screen-card__meta')).opacity),
+      strip: grid.classList.contains('is-strip'),
+      current: document.querySelectorAll('[data-screen-focus][aria-current="true"]').length
+    };
+  });
+  check('screens: click focuses the chosen plate',
+    focused.active === 2 && focused.meta[2] === '1' && focused.meta[0] === '0', JSON.stringify(focused));
+  check('screens: focused plate is the largest',
+    focused.widths[2] > focused.widths[1] && focused.widths[0] === focused.widths[1],
+    JSON.stringify(focused.widths));
+  check('screens: one plate is current', focused.current === 1, String(focused.current));
+
+  await page.locator('[data-screen-focus]').first().focus();
+  await page.waitForTimeout(1100);
+  check('screens: keyboard focus moves the strip',
+    await page.evaluate(() => document.querySelector('[data-screen-card]').classList.contains('is-active')));
+  await context.close();
+}
+
+{
+  const { context, page } = await newPage({ width: 390, height: 844, lang: 'en' });
+  await page.goto(BASE + 'en/', { waitUntil: 'load' });
+  await page.waitForTimeout(1000);
+  await page.evaluate(() => {
+    const el = document.getElementById('screens');
+    window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 20);
+  });
+  await page.waitForTimeout(500);
+
+  const first = await page.evaluate(() => {
+    const cards = [...document.querySelectorAll('[data-screen-card]')];
+    return {
+      focused: document.querySelector('.screens__grid').classList.contains('has-focus'),
+      active: cards.findIndex((c) => c.classList.contains('is-active'))
+    };
+  });
+  check('screens phone: nearest card is focused', first.focused && first.active === 0, JSON.stringify(first));
+
+  await page.evaluate(() => {
+    const grid = document.querySelector('.screens__grid');
+    grid.scrollTo({ left: grid.scrollWidth, behavior: 'instant' });
+  });
+  await page.waitForTimeout(450);
+  const last = await page.evaluate(() => {
+    const cards = [...document.querySelectorAll('[data-screen-card]')];
+    return {
+      active: cards.findIndex((c) => c.classList.contains('is-active')),
+      scroll: Math.round(document.querySelector('.screens__grid').scrollLeft)
+    };
+  });
+  check('screens phone: swipe moves the focus', last.active === 2, JSON.stringify(last));
+  await context.close();
+}
+
+{
+  const { context, page } = await newPage({ width: 390, height: 844, lang: 'ar' });
+  await page.goto(BASE, { waitUntil: 'load' });
+  await page.waitForTimeout(1000);
+  await page.evaluate(() => {
+    const el = document.getElementById('screens');
+    window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 20);
+  });
+  await page.waitForTimeout(400);
+  await page.evaluate(() => {
+    const grid = document.querySelector('.screens__grid');
+    grid.scrollLeft = -grid.scrollWidth;
+  });
+  await page.waitForTimeout(450);
+  const rtl = await page.evaluate(() => {
+    const cards = [...document.querySelectorAll('[data-screen-card]')];
+    return {
+      dir: document.documentElement.dir,
+      active: cards.findIndex((c) => c.classList.contains('is-active'))
+    };
+  });
+  check('screens phone rtl: swipe focuses the last card', rtl.dir === 'rtl' && rtl.active === 2, JSON.stringify(rtl));
+  await context.close();
+}
+
 /* ------------------------------------------------------------- music */
 
 {
@@ -440,12 +554,14 @@ for (const [lang, prefix] of langs) {
     return {
       reduce: document.documentElement.classList.contains('reduce'),
       reveals: document.querySelectorAll('.reveal').length,
+      screens: document.querySelectorAll('.screen-card[style]').length,
       disc: getComputedStyle(document.querySelector('.disc')).animationName,
       hero: document.querySelector('.hero__title').getBoundingClientRect().height
     };
   });
   check('reduced motion: class set', m.reduce);
   check('reduced motion: nothing hidden for reveals', m.reveals === 0, String(m.reveals));
+  check('reduced motion: screens stay still', m.screens === 0, String(m.screens));
   check('reduced motion: disc still', m.disc === 'none', m.disc);
   check('reduced motion: content visible', m.hero > 20, String(m.hero));
   await context.close();

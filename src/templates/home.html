@@ -61,10 +61,10 @@
       <h2 class="section-title" data-reveal>{{t.screens.title}}</h2>
       <p class="section-lead" data-reveal>{{t.screens.lead}}</p>
     </div>
-    <ul class="screens__grid">
+    <ul class="screens__grid" data-screens>
       {{#each screens.items}}
       <li class="screen-card" data-screen-card>
-        <div class="screen-card__frame">
+        <div class="screen-card__frame" data-screen-focus>
           <img src="{{src}}" srcset="{{srcset}}" sizes="(max-width: 720px) 62vw, 300px" width="{{width}}" height="{{height}}" alt="{{alt}}" loading="lazy" decoding="async">
         </div>
         <div class="screen-card__meta">
